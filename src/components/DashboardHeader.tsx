@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useCallback, useRef, type ReactNode } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiAppBar from "@mui/material/AppBar";
@@ -44,7 +44,7 @@ const LogoContainer = styled("div")({
 
 export interface DashboardHeaderProps {
 	/** Optional brand mark shown left of the title (e.g. <img /> or an icon). */
-	logo?: React.ReactNode;
+	logo?: ReactNode;
 	/** Optional product/app name shown next to the logo and linked to home. */
 	title?: string;
 	/** Whether the left navigation menu is currently expanded. */
@@ -60,7 +60,7 @@ export default function DashboardHeader({
 	onToggleMenu,
 }: DashboardHeaderProps) {
 	const theme = useTheme();
-	const appBarRef = React.useRef<HTMLDivElement>(null);
+	const appBarRef = useRef<HTMLDivElement>(null);
 
 	// Toggle the sidebar; when collapsing, return focus to the toggle for a11y
 	const handleMenuOpen = () => {
@@ -81,7 +81,7 @@ export default function DashboardHeader({
 	 * Returns the menu toggle button with proper tooltip and ARIA label.
 	 * Shows a different icon depending on the expanded/collapsed state.
 	 */
-	const getMenuIcon = React.useCallback(
+	const getMenuIcon = useCallback(
 		(isExpanded: boolean) => {
 			return (
 				<Tooltip

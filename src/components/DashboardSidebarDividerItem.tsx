@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext } from "react";
 import Divider from "@mui/material/Divider";
 import DashboardSidebarContext from "../context/DashboardSidebarContext";
 import { getDrawerSxTransitionMixin } from "../mixins";
@@ -9,7 +9,7 @@ import { getDrawerSxTransitionMixin } from "../mixins";
  * Uses drawer transition mixin so margins animate along with width changes.
  */
 export default function DashboardSidebarDividerItem() {
-	const sidebarContext = React.useContext(DashboardSidebarContext);
+	const sidebarContext = useContext(DashboardSidebarContext);
 	if (!sidebarContext) {
 		throw new Error("Sidebar context was used without a provider.");
 	}

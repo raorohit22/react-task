@@ -1,4 +1,4 @@
-import * as React from "react";
+import { forwardRef } from "react";
 import { type Theme, alpha, type Components } from "@mui/material/styles";
 import { type SvgIconProps } from "@mui/material/SvgIcon";
 import { buttonBaseClasses } from "@mui/material/ButtonBase";
@@ -65,11 +65,9 @@ export const navigationCustomizations: Components<Theme> = {
 	},
 	MuiSelect: {
 		defaultProps: {
-			IconComponent: React.forwardRef<SVGSVGElement, SvgIconProps>(
-				(props, ref) => (
-					<UnfoldMoreRoundedIcon fontSize="small" {...props} ref={ref} />
-				)
-			),
+			IconComponent: forwardRef<SVGSVGElement, SvgIconProps>((props, ref) => (
+				<UnfoldMoreRoundedIcon fontSize="small" {...props} ref={ref} />
+			)),
 		},
 		styleOverrides: {
 			root: ({ theme }) => ({

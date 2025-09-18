@@ -1,4 +1,12 @@
-import * as React from "react";
+import {
+	Fragment,
+	createContext,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+	type ReactNode,
+} from "react";
 import Alert from "@mui/material/Alert";
 import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
@@ -15,15 +23,13 @@ import type {
 	ShowNotificationOptions,
 } from "./useNotifications";
 
-const RootPropsContext = React.createContext<NotificationsProviderProps | null>(
-	null
-);
+const RootPropsContext = createContext<NotificationsProviderProps | null>(null);
 
 interface NotificationProps {
 	notificationKey: string;
 	badge: string | null;
 	open: boolean;
-	message: React.ReactNode;
+	message: ReactNode;
 	options: ShowNotificationOptions;
 }
 
@@ -34,7 +40,7 @@ function Notification({
 	options,
 	badge,
 }: NotificationProps) {
-	const notificationsContext = React.useContext(NotificationsContext);
+	const notificationsContext = useContext(NotificationsContext);
 	if (!notificationsContext) {
 		throw new Error("Notifications context was used without a provider.");
 	}
@@ -48,7 +54,7 @@ function Notification({
 	} = options;
 	const alertColor = severity as "success" | "error" | "warning" | "info";
 
-	const handleClose = React.useCallback(
+	const handleClose = useCallback(
 		(_event: unknown, reason?: CloseReason | SnackbarCloseReason) => {
 			if (reason === "clickaway") {
 				return;
@@ -59,7 +65,7 @@ function Notification({
 	);
 
 	const action = (
-		<React.Fragment>
+		<Fragment>
 			{/* Optional action button; caller decides label & handler */}
 			{onAction ? (
 				<Button color="inherit" size="small" onClick={onAction}>
@@ -76,10 +82,10 @@ function Notification({
 			>
 				<CloseIcon fontSize="small" />
 			</IconButton>
-		</React.Fragment>
+		</Fragment>
 	);
 
-	const props = React.useContext(RootPropsContext);
+	const props = useContext(RootPropsContext);
 	const snackbarSlotProps = useSlotProps({
 		elementType: Snackbar,
 		ownerState: props,
@@ -145,7 +151,7 @@ function Notifications({ state }: NotificationsProps) {
 }
 
 export interface NotificationsProviderProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 }
 
 let nextId = 0;
@@ -163,10 +169,10 @@ export default function NotificationsProvider(
 	props: NotificationsProviderProps
 ) {
 	const { children } = props;
-	const [state, setState] = React.useState<NotificationsState>({ queue: [] });
+	const [state, setState] = useState<NotificationsState>({ queue: [] });
 
 	// Enqueue a notification; dedupe by key if provided
-	const show = React.useCallback<ShowNotification>((message, options = {}) => {
+	const show = useCallback<ShowNotification>((message, options = {}) => {
 		const notificationKey =
 			options.key ?? `::toolpad-internal::notification::${generateId()}`;
 		setState((prev) => {
@@ -186,14 +192,14 @@ export default function NotificationsProvider(
 	}, []);
 
 	// Remove a notification from the queue
-	const close = React.useCallback<CloseNotification>((key) => {
+	const close = useCallback<CloseNotification>((key) => {
 		setState((prev) => ({
 			...prev,
 			queue: prev.queue.filter((n) => n.notificationKey !== key),
 		}));
 	}, []);
 
-	const contextValue = React.useMemo(() => ({ show, close }), [show, close]);
+	const contextValue = useMemo(() => ({ show, close }), [show, close]);
 
 	return (
 		<RootPropsContext.Provider value={props}>

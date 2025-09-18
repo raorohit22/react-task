@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useCallback } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
@@ -73,7 +73,7 @@ export default function BookForm(props: BookFormProps) {
 	});
 
 	// Bridge form submission to the async onSubmit prop with error bubbling
-	const handleFormSubmit = React.useCallback(
+	const handleFormSubmit = useCallback(
 		async (data: BookFormData) => {
 			try {
 				await onSubmit(data);
@@ -85,7 +85,7 @@ export default function BookForm(props: BookFormProps) {
 	);
 
 	// Reset all fields to defaults and notify parent if provided
-	const handleReset = React.useCallback(() => {
+	const handleReset = useCallback(() => {
 		reset();
 		if (onReset) {
 			onReset();
@@ -93,7 +93,7 @@ export default function BookForm(props: BookFormProps) {
 	}, [reset, onReset]);
 
 	// Navigate back to the configured path or dashboard by default
-	const handleBack = React.useCallback(() => {
+	const handleBack = useCallback(() => {
 		navigate(backButtonPath ?? "/dashboard");
 	}, [navigate, backButtonPath]);
 

@@ -1,4 +1,11 @@
-import * as React from "react";
+import {
+	useContext,
+	useMemo,
+	useState,
+	type ComponentType,
+	type FormEvent,
+	type ReactNode,
+} from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -25,22 +32,22 @@ export interface AlertOptions extends OpenDialogOptions<void> {
 	/**
 	 * A title for the dialog. Defaults to `'Alert'`.
 	 */
-	title?: React.ReactNode;
+	title?: ReactNode;
 	/**
 	 * The text to show in the "Ok" button. Defaults to `'Ok'`.
 	 */
-	okText?: React.ReactNode;
+	okText?: ReactNode;
 }
 
 export interface ConfirmOptions extends OpenDialogOptions<boolean> {
 	/**
 	 * A title for the dialog. Defaults to `'Confirm'`.
 	 */
-	title?: React.ReactNode;
+	title?: ReactNode;
 	/**
 	 * The text to show in the "Ok" button. Defaults to `'Ok'`.
 	 */
-	okText?: React.ReactNode;
+	okText?: ReactNode;
 	/**
 	 * Denotes the purpose of the dialog. This will affect the color of the
 	 * "Ok" button. Defaults to `undefined`.
@@ -49,22 +56,22 @@ export interface ConfirmOptions extends OpenDialogOptions<boolean> {
 	/**
 	 * The text to show in the "Cancel" button. Defaults to `'Cancel'`.
 	 */
-	cancelText?: React.ReactNode;
+	cancelText?: ReactNode;
 }
 
 export interface PromptOptions extends OpenDialogOptions<string | null> {
 	/**
 	 * A title for the dialog. Defaults to `'Prompt'`.
 	 */
-	title?: React.ReactNode;
+	title?: ReactNode;
 	/**
 	 * The text to show in the "Ok" button. Defaults to `'Ok'`.
 	 */
-	okText?: React.ReactNode;
+	okText?: ReactNode;
 	/**
 	 * The text to show in the "Cancel" button. Defaults to `'Cancel'`.
 	 */
-	cancelText?: React.ReactNode;
+	cancelText?: ReactNode;
 }
 
 /**
@@ -99,7 +106,7 @@ export interface OpenAlertDialog {
 	 * @param options Additional options for the dialog.
 	 * @returns A promise that resolves when the dialog is closed.
 	 */
-	(msg: React.ReactNode, options?: AlertOptions): Promise<void>;
+	(msg: ReactNode, options?: AlertOptions): Promise<void>;
 }
 
 export interface OpenConfirmDialog {
@@ -111,7 +118,7 @@ export interface OpenConfirmDialog {
 	 * @param options Additional options for the dialog.
 	 * @returns A promise that resolves to true if the user confirms, false if the user cancels.
 	 */
-	(msg: React.ReactNode, options?: ConfirmOptions): Promise<boolean>;
+	(msg: ReactNode, options?: ConfirmOptions): Promise<boolean>;
 }
 
 export interface OpenPromptDialog {
@@ -123,10 +130,10 @@ export interface OpenPromptDialog {
 	 * @param options Additional options for the dialog.
 	 * @returns A promise that resolves to the user input if the user confirms, null if the user cancels.
 	 */
-	(msg: React.ReactNode, options?: PromptOptions): Promise<string | null>;
+	(msg: ReactNode, options?: PromptOptions): Promise<string | null>;
 }
 
-export type DialogComponent<P, R> = React.ComponentType<DialogProps<P, R>>;
+export type DialogComponent<P, R> = ComponentType<DialogProps<P, R>>;
 
 export interface OpenDialog {
 	/**
@@ -172,7 +179,7 @@ export interface DialogHook {
 
 // Helper to wrap buttons that should show a loading state while awaiting onClose
 function useDialogLoadingButton(onClose: () => Promise<void>) {
-	const [loading, setLoading] = React.useState(false);
+	const [loading, setLoading] = useState(false);
 	const handleClick = async () => {
 		try {
 			setLoading(true);
@@ -188,7 +195,7 @@ function useDialogLoadingButton(onClose: () => Promise<void>) {
 }
 
 export interface AlertDialogPayload extends AlertOptions {
-	msg: React.ReactNode;
+	msg: ReactNode;
 }
 
 export interface AlertDialogProps
@@ -211,7 +218,7 @@ export function AlertDialog({ open, payload, onClose }: AlertDialogProps) {
 }
 
 export interface ConfirmDialogPayload extends ConfirmOptions {
-	msg: React.ReactNode;
+	msg: ReactNode;
 }
 
 export interface ConfirmDialogProps
@@ -238,17 +245,17 @@ export function ConfirmDialog({ open, payload, onClose }: ConfirmDialogProps) {
 }
 
 export interface PromptDialogPayload extends PromptOptions {
-	msg: React.ReactNode;
+	msg: ReactNode;
 }
 
 export interface PromptDialogProps
 	extends DialogProps<PromptDialogPayload, string | null> {}
 
 export function PromptDialog({ open, payload, onClose }: PromptDialogProps) {
-	const [input, setInput] = React.useState("");
+	const [input, setInput] = useState("");
 	const cancelButtonProps = useDialogLoadingButton(() => onClose(null));
 
-	const [loading, setLoading] = React.useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const name = "input";
 	return (
@@ -260,7 +267,7 @@ export function PromptDialog({ open, payload, onClose }: PromptDialogProps) {
 			slotProps={{
 				paper: {
 					component: "form",
-					onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
+					onSubmit: async (event: FormEvent<HTMLFormElement>) => {
 						event.preventDefault();
 						try {
 							setLoading(true);
@@ -308,7 +315,7 @@ export function PromptDialog({ open, payload, onClose }: PromptDialogProps) {
 }
 
 export function useDialogs(): DialogHook {
-	const dialogsContext = React.useContext(DialogsContext);
+	const dialogsContext = useContext(DialogsContext);
 	if (!dialogsContext) {
 		throw new Error("Dialogs context was used without a provider.");
 	}
@@ -330,7 +337,7 @@ export function useDialogs(): DialogHook {
 			open(PromptDialog, { ...options, msg }, { onClose })
 	);
 
-	return React.useMemo(
+	return useMemo(
 		() => ({
 			alert,
 			confirm,

@@ -1,4 +1,11 @@
-import * as React from "react";
+import {
+	Fragment,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+	type ReactNode,
+} from "react";
 import type { Theme, SxProps } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -19,14 +26,14 @@ import { MINI_DRAWER_WIDTH } from "../constants";
 export interface DashboardSidebarPageItemProps {
 	id: string;
 	title: string;
-	icon?: React.ReactNode;
+	icon?: ReactNode;
 	href: string;
-	action?: React.ReactNode;
+	action?: ReactNode;
 	defaultExpanded?: boolean;
 	expanded?: boolean;
 	selected?: boolean;
 	disabled?: boolean;
-	nestedNavigation?: React.ReactNode;
+	nestedNavigation?: ReactNode;
 }
 
 /**
@@ -48,7 +55,7 @@ export default function DashboardSidebarPageItem({
 	disabled = false,
 	nestedNavigation,
 }: DashboardSidebarPageItemProps) {
-	const sidebarContext = React.useContext(DashboardSidebarContext);
+	const sidebarContext = useContext(DashboardSidebarContext);
 	if (!sidebarContext) {
 		throw new Error("Sidebar context was used without a provider.");
 	}
@@ -59,9 +66,9 @@ export default function DashboardSidebarPageItem({
 		fullyCollapsed = false,
 	} = sidebarContext;
 
-	const [isHovered, setIsHovered] = React.useState(false);
+	const [isHovered, setIsHovered] = useState(false);
 
-	const handleClick = React.useCallback(() => {
+	const handleClick = useCallback(() => {
 		if (onPageItemClick) {
 			onPageItemClick(id, !!nestedNavigation);
 		}
@@ -97,7 +104,7 @@ export default function DashboardSidebarPageItem({
 	const LinkComponent = hasExternalHref ? "a" : Link;
 
 	// Provide "full" sidebar context for nested content displayed in mini hover panel
-	const miniNestedNavigationSidebarContextValue = React.useMemo(() => {
+	const miniNestedNavigationSidebarContextValue = useMemo(() => {
 		return {
 			onPageItemClick: onPageItemClick ?? (() => {}),
 			mini: false,
@@ -108,7 +115,7 @@ export default function DashboardSidebarPageItem({
 	}, [onPageItemClick]);
 
 	return (
-		<React.Fragment>
+		<Fragment>
 			<ListItem
 				disablePadding
 				{...(nestedNavigation && mini
@@ -265,6 +272,6 @@ export default function DashboardSidebarPageItem({
 					{nestedNavigation}
 				</Collapse>
 			) : null}
-		</React.Fragment>
+		</Fragment>
 	);
 }

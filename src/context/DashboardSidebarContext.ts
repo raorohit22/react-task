@@ -1,4 +1,4 @@
-import * as React from "react";
+import { createContext } from "react";
 
 /**
  * DashboardSidebarContext
@@ -8,7 +8,7 @@ import * as React from "react";
  * - `fullyExpanded` / `fullyCollapsed`: transition-completion flags to coordinate animations
  * - `hasDrawerTransitions`: whether to animate style changes (padding, height, margins)
  */
-const DashboardSidebarContext = React.createContext<{
+const DashboardSidebarContext = createContext<{
 	onPageItemClick: (id: string, hasNestedNavigation: boolean) => void;
 	mini: boolean;
 	fullyExpanded: boolean;

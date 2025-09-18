@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useCallback, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
@@ -25,9 +25,9 @@ export default function DashboardLayout() {
 
 	// Persist separate expansion states for desktop and mobile
 	const [isDesktopNavigationExpanded, setIsDesktopNavigationExpanded] =
-		React.useState(true);
+		useState(true);
 	const [isMobileNavigationExpanded, setIsMobileNavigationExpanded] =
-		React.useState(false);
+		useState(false);
 
 	// Track viewport breakpoint to switch which state we read/write
 	const isOverMdViewport = useMediaQuery(theme.breakpoints.up("md"));
@@ -38,7 +38,7 @@ export default function DashboardLayout() {
 		: isMobileNavigationExpanded;
 
 	// Setter that writes to the correct state bucket for the current viewport
-	const setIsNavigationExpanded = React.useCallback(
+	const setIsNavigationExpanded = useCallback(
 		(newExpanded: boolean) => {
 			if (isOverMdViewport) {
 				setIsDesktopNavigationExpanded(newExpanded);
@@ -54,7 +54,7 @@ export default function DashboardLayout() {
 	);
 
 	// Header passes back the desired expansion state (post-toggle)
-	const handleToggleHeaderMenu = React.useCallback(
+	const handleToggleHeaderMenu = useCallback(
 		(isExpanded: boolean) => {
 			setIsNavigationExpanded(isExpanded);
 		},
@@ -62,7 +62,7 @@ export default function DashboardLayout() {
 	);
 
 	// Provides a DOM container for the sidebar (useful for portal-based drawers)
-	const layoutRef = React.useRef<HTMLDivElement>(null);
+	const layoutRef = useRef<HTMLDivElement>(null);
 
 	return (
 		<Box

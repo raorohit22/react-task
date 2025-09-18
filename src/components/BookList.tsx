@@ -1,4 +1,11 @@
-import * as React from "react";
+import {
+	useCallback,
+	useDeferredValue,
+	useEffect,
+	useMemo,
+	useState,
+	type MouseEvent,
+} from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -58,30 +65,31 @@ export default function BookList() {
 	const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
 	// Local UI state: search + filter chips and their menus
-	const [search, setSearch] = React.useState<string>("");
-	const [genreFilter, setGenreFilter] = React.useState<string>("");
-	const [statusFilter, setStatusFilter] = React.useState<string>("");
-	const [genreMenuAnchor, setGenreMenuAnchor] =
-		React.useState<null | HTMLElement>(null);
-	const [statusMenuAnchor, setStatusMenuAnchor] =
-		React.useState<null | HTMLElement>(null);
+	const [search, setSearch] = useState<string>("");
+	const [genreFilter, setGenreFilter] = useState<string>("");
+	const [statusFilter, setStatusFilter] = useState<string>("");
+	const [genreMenuAnchor, setGenreMenuAnchor] = useState<null | HTMLElement>(
+		null
+	);
+	const [statusMenuAnchor, setStatusMenuAnchor] = useState<null | HTMLElement>(
+		null
+	);
 	// Defer search input value to reduce query churn while typing
-	const debouncedSearch = React.useDeferredValue(search);
+	const debouncedSearch = useDeferredValue(search);
 	const navigate = useNavigate();
 
 	const dialogs = useDialogs();
 	const notifications = useNotifications();
 
 	// DataGrid models managed locally; sent to server-side query
-	const [paginationModel, setPaginationModel] =
-		React.useState<GridPaginationModel>({
-			page: 0,
-			pageSize: INITIAL_PAGE_SIZE,
-		});
-	const [filterModel, setFilterModel] = React.useState<GridFilterModel>({
+	const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+		page: 0,
+		pageSize: INITIAL_PAGE_SIZE,
+	});
+	const [filterModel, setFilterModel] = useState<GridFilterModel>({
 		items: [],
 	});
-	const [sortModel, setSortModel] = React.useState<GridSortModel>([]);
+	const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
 	const queryClient = useQueryClient();
 
@@ -105,31 +113,28 @@ export default function BookList() {
 		placeholderData: keepPreviousData,
 	});
 
-	React.useEffect(() => {
+	useEffect(() => {
 		// Ensure we always jump back to first page when search or filters change
 		setPaginationModel((prev) => ({ ...prev, page: 0 }));
 	}, [debouncedSearch, genreFilter, statusFilter]);
 
 	// Handlers for DataGrid models
-	const handlePaginationModelChange = React.useCallback(
+	const handlePaginationModelChange = useCallback(
 		(model: GridPaginationModel) => {
 			setPaginationModel(model);
 		},
 		[]
 	);
 
-	const handleFilterModelChange = React.useCallback(
-		(model: GridFilterModel) => {
-			setFilterModel(model);
-		},
-		[]
-	);
+	const handleFilterModelChange = useCallback((model: GridFilterModel) => {
+		setFilterModel(model);
+	}, []);
 
-	const handleSortModelChange = React.useCallback((model: GridSortModel) => {
+	const handleSortModelChange = useCallback((model: GridSortModel) => {
 		setSortModel(model);
 	}, []);
 
-	const handleRowClick = React.useCallback<GridEventListener<"rowClick">>(
+	const handleRowClick = useCallback<GridEventListener<"rowClick">>(
 		({ row }: { row: ApiBook }) => {
 			navigate(`/books/${row.id}`);
 		},
@@ -137,19 +142,19 @@ export default function BookList() {
 	);
 
 	// Top-level action buttons
-	const handleCreateClick = React.useCallback(() => {
+	const handleCreateClick = useCallback(() => {
 		navigate("/books/new");
 	}, [navigate]);
 
 	// Row actions
-	const handleRowEdit = React.useCallback(
+	const handleRowEdit = useCallback(
 		(book: ApiBook) => () => {
 			navigate(`/books/${book.id}/edit`);
 		},
 		[navigate]
 	);
 
-	const handleRowDelete = React.useCallback(
+	const handleRowDelete = useCallback(
 		(book: ApiBook) => async () => {
 			const confirmed = await dialogs.confirm(
 				`Do you wish to delete ${book.title}?`,
@@ -184,7 +189,7 @@ export default function BookList() {
 		[dialogs, notifications, queryClient]
 	);
 
-	const initialState = React.useMemo(
+	const initialState = useMemo(
 		() => ({
 			pagination: { paginationModel: { pageSize: INITIAL_PAGE_SIZE } },
 			columns: {
@@ -199,7 +204,7 @@ export default function BookList() {
 	);
 
 	// DataGrid column config; serial number computed from page/pageSize
-	const columns = React.useMemo<GridColDef[]>(
+	const columns = useMemo<GridColDef[]>(
 		() => [
 			{
 				field: "serialNo",
@@ -283,11 +288,11 @@ export default function BookList() {
 
 	const pageTitle = "Books";
 
-	const handleGenreClick = (event: React.MouseEvent<HTMLElement>) => {
+	const handleGenreClick = (event: MouseEvent<HTMLElement>) => {
 		setGenreMenuAnchor(event.currentTarget);
 	};
 
-	const handleStatusClick = (event: React.MouseEvent<HTMLElement>) => {
+	const handleStatusClick = (event: MouseEvent<HTMLElement>) => {
 		setStatusMenuAnchor(event.currentTarget);
 	};
 

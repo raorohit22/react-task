@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useCallback, useMemo } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -29,7 +29,7 @@ function BookEditForm({
 	const notifications = useNotifications();
 
 	// Wrap the parent's submit to show notifications and navigate back
-	const handleFormSubmit = React.useCallback(
+	const handleFormSubmit = useCallback(
 		async (data: BookFormData) => {
 			try {
 				await onSubmit(data);
@@ -84,7 +84,7 @@ export default function BookEdit() {
 	});
 
 	// Submit handler: update server and invalidate both list and item queries
-	const handleSubmit = React.useCallback(
+	const handleSubmit = useCallback(
 		async (formValues: BookFormData) => {
 			await updateBook(
 				String(bookId),
@@ -97,7 +97,7 @@ export default function BookEdit() {
 	);
 
 	// Memoize loaded/empty/error views for simpler render logic
-	const renderEdit = React.useMemo(() => {
+	const renderEdit = useMemo(() => {
 		if (isLoading) {
 			return (
 				<Box

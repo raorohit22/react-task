@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext, type ReactNode } from "react";
 import NotificationsContext from "./NotificationsContext";
 
 export interface ShowNotificationOptions {
@@ -18,7 +18,7 @@ export interface ShowNotificationOptions {
 	/**
 	 * The text to display on the action button.
 	 */
-	actionText?: React.ReactNode;
+	actionText?: ReactNode;
 	/**
 	 * The callback to call when the action button is clicked.
 	 */
@@ -34,7 +34,7 @@ export interface ShowNotification {
 	 * @returns The key that represents the notification. Useful for programmatically
 	 * closing it.
 	 */
-	(message: React.ReactNode, options?: ShowNotificationOptions): string;
+	(message: ReactNode, options?: ShowNotificationOptions): string;
 }
 
 export interface CloseNotification {
@@ -52,7 +52,7 @@ interface UseNotifications {
 }
 
 export default function useNotifications(): UseNotifications {
-	const notificationsContext = React.useContext(NotificationsContext);
+	const notificationsContext = useContext(NotificationsContext);
 	if (!notificationsContext) {
 		throw new Error("Notifications context was used without a provider.");
 	}

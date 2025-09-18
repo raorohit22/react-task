@@ -1,4 +1,4 @@
-import * as React from "react";
+import { Fragment, useCallback } from "react";
 import { useTheme, useColorScheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import IconButton from "@mui/material/IconButton";
@@ -24,7 +24,7 @@ export default function ThemeSwitcher() {
 	const paletteMode = !mode || mode === "system" ? preferredMode : mode;
 
 	// Toggle to the opposite palette mode
-	const toggleMode = React.useCallback(() => {
+	const toggleMode = useCallback(() => {
 		setMode(paletteMode === "dark" ? "light" : "dark");
 	}, [setMode, paletteMode]);
 
@@ -43,7 +43,7 @@ export default function ThemeSwitcher() {
 				>
 					{/* Swap icons via color scheme selector to avoid re-render jumps */}
 					{theme.getColorSchemeSelector ? (
-						<React.Fragment>
+						<Fragment>
 							<LightModeIcon
 								sx={{
 									display: "inline",
@@ -60,7 +60,7 @@ export default function ThemeSwitcher() {
 									},
 								}}
 							/>
-						</React.Fragment>
+						</Fragment>
 					) : null}
 				</IconButton>
 			</div>

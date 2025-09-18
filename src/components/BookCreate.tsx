@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router";
 import useNotifications from "../hooks/useNotifications/useNotifications";
 import { createOne as createBook, type ApiBook } from "../data/book";
@@ -26,7 +26,7 @@ export default function BookCreate() {
 	});
 
 	// Submit handler passed to BookForm
-	const handleFormSubmit = React.useCallback(
+	const handleFormSubmit = useCallback(
 		async (data: BookFormData) => {
 			try {
 				await mutateAsync(data as Omit<ApiBook, "id">);

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useCallback, useMemo } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -41,12 +41,12 @@ export default function BookShow() {
 	});
 
 	// Navigate to edit page
-	const handleBookEdit = React.useCallback(() => {
+	const handleBookEdit = useCallback(() => {
 		navigate(`/books/${bookId}/edit`);
 	}, [navigate, bookId]);
 
 	// Confirm and delete this book, then navigate back to the list
-	const handleBookDelete = React.useCallback(async () => {
+	const handleBookDelete = useCallback(async () => {
 		if (!book) {
 			return;
 		}
@@ -84,12 +84,12 @@ export default function BookShow() {
 	}, [book, dialogs, bookId, navigate, notifications]);
 
 	// Back to dashboard (or adjust to previous list if desired)
-	const handleBack = React.useCallback(() => {
+	const handleBack = useCallback(() => {
 		navigate("/dashboard");
 	}, [navigate]);
 
 	// Memoized UI for loading/error/data
-	const renderShow = React.useMemo(() => {
+	const renderShow = useMemo(() => {
 		if (isLoading) {
 			return (
 				<Box

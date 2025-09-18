@@ -1,4 +1,4 @@
-import * as React from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Box from "@mui/material/Box";
@@ -47,17 +47,17 @@ export default function DashboardSidebar({
 
 	const { pathname } = useLocation();
 
-	const [expandedItemIds, setExpandedItemIds] = React.useState<string[]>([]);
+	const [expandedItemIds, setExpandedItemIds] = useState<string[]>([]);
 
 	const isOverSmViewport = useMediaQuery(theme.breakpoints.up("sm"));
 	const isOverMdViewport = useMediaQuery(theme.breakpoints.up("md"));
 
 	// Track whether the drawer width transition has finished expanding/collapsing
-	const [isFullyExpanded, setIsFullyExpanded] = React.useState(expanded);
-	const [isFullyCollapsed, setIsFullyCollapsed] = React.useState(!expanded);
+	const [isFullyExpanded, setIsFullyExpanded] = useState(expanded);
+	const [isFullyCollapsed, setIsFullyCollapsed] = useState(!expanded);
 
 	// After expand, mark fully-expanded once the width transition duration elapses
-	React.useEffect(() => {
+	useEffect(() => {
 		if (expanded) {
 			const drawerWidthTransitionTimeout = setTimeout(() => {
 				setIsFullyExpanded(true);
@@ -72,7 +72,7 @@ export default function DashboardSidebar({
 	}, [expanded, theme.transitions.duration.enteringScreen]);
 
 	// After collapse, mark fully-collapsed once the width transition duration elapses
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!expanded) {
 			const drawerWidthTransitionTimeout = setTimeout(() => {
 				setIsFullyCollapsed(true);
@@ -90,7 +90,7 @@ export default function DashboardSidebar({
 	const mini = !disableCollapsibleSidebar && !expanded;
 
 	// Helpers to open/close the drawer for the current viewport
-	const handleSetSidebarExpanded = React.useCallback(
+	const handleSetSidebarExpanded = useCallback(
 		(newExpanded: boolean) => () => {
 			setExpanded(newExpanded);
 		},
@@ -98,7 +98,7 @@ export default function DashboardSidebar({
 	);
 
 	// Clicking items with children toggles them; on phones, clicking a leaf closes the drawer
-	const handlePageItemClick = React.useCallback(
+	const handlePageItemClick = useCallback(
 		(itemId: string, hasNestedNavigation: boolean) => {
 			if (hasNestedNavigation && !mini) {
 				setExpandedItemIds((previousValue) =>
@@ -123,9 +123,9 @@ export default function DashboardSidebar({
 	 * Renders the drawer content: top spacer + navigation list.
 	 * Adds aria-label based on viewport for better semantics.
 	 */
-	const getDrawerContent = React.useCallback(
+	const getDrawerContent = useCallback(
 		(viewport: "phone" | "tablet" | "desktop") => (
-			<React.Fragment>
+			<Fragment>
 				<Toolbar />
 				<Box
 					component="nav"
@@ -163,13 +163,13 @@ export default function DashboardSidebar({
 						/>
 					</List>
 				</Box>
-			</React.Fragment>
+			</Fragment>
 		),
 		[mini, hasDrawerTransitions, isFullyExpanded, expandedItemIds, pathname]
 	);
 
 	// Shared Drawer styles for all variants; width reacts to mini vs expanded
-	const getDrawerSharedSx = React.useCallback(
+	const getDrawerSharedSx = useCallback(
 		(isTemporary: boolean) => {
 			const drawerWidth = mini ? MINI_DRAWER_WIDTH : DRAWER_WIDTH;
 
@@ -192,7 +192,7 @@ export default function DashboardSidebar({
 	);
 
 	// Expose sidebar state to descendants (page items) via context
-	const sidebarContextValue = React.useMemo(() => {
+	const sidebarContextValue = useMemo(() => {
 		return {
 			onPageItemClick: handlePageItemClick,
 			mini,

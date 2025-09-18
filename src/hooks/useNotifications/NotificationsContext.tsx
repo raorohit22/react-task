@@ -1,4 +1,4 @@
-import * as React from "react";
+import { createContext } from "react";
 import type { ShowNotification, CloseNotification } from "./useNotifications";
 
 /**
@@ -6,7 +6,7 @@ import type { ShowNotification, CloseNotification } from "./useNotifications";
  * Provides `show` and `close` functions for queued snackbars.
  * Use with `NotificationsProvider` and `useNotifications()`.
  */
-const NotificationsContext = React.createContext<{
+const NotificationsContext = createContext<{
 	show: ShowNotification;
 	close: CloseNotification;
 } | null>(null);

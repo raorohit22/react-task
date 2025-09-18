@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import { type ReactNode } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Container, { type ContainerProps } from "@mui/material/Container";
@@ -30,11 +30,11 @@ const PageHeaderToolbar = styled("div")(({ theme }) => ({
 
 export interface PageContainerProps extends ContainerProps {
 	/** Page body */
-	children?: React.ReactNode;
+	children?: ReactNode;
 	/** Optional page title rendered on the left */
 	title?: string;
 	/** Optional actions rendered on the right of the header */
-	actions?: React.ReactNode;
+	actions?: ReactNode;
 }
 
 export default function PageContainer(props: PageContainerProps) {
