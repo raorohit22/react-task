@@ -1,16 +1,16 @@
-import * as React from 'react';
-import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import * as React from "react";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import {
 	DataGrid,
 	GridActionsCellItem,
@@ -20,52 +20,67 @@ import {
 	type GridSortModel,
 	type GridEventListener,
 	gridClasses,
-} from '@mui/x-data-grid';
-import AddIcon from '@mui/icons-material/Add';
-import ClearIcon from '@mui/icons-material/Clear';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SearchIcon from '@mui/icons-material/Search';
-import { useNavigate } from 'react-router';
-import { useDialogs } from '../hooks/useDialogs/useDialogs';
-import useNotifications from '../hooks/useNotifications/useNotifications';
+} from "@mui/x-data-grid";
+import AddIcon from "@mui/icons-material/Add";
+import ClearIcon from "@mui/icons-material/Clear";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router";
+import { useDialogs } from "../hooks/useDialogs/useDialogs";
+import useNotifications from "../hooks/useNotifications/useNotifications";
 import {
 	deleteOne as deleteBook,
 	getMany as getBooks,
 	type ApiBook,
-} from '../data/book';
-import PageContainer from './PageContainer';
-import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
+} from "../data/book";
+import PageContainer from "./PageContainer";
+import {
+	useQuery,
+	useQueryClient,
+	keepPreviousData,
+} from "@tanstack/react-query";
 
 const INITIAL_PAGE_SIZE = 10;
 
 export default function BookList() {
 	const theme = useTheme();
-	const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-	const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+	const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
-	const [search, setSearch] = React.useState<string>('');
-	const [genreFilter, setGenreFilter] = React.useState<string>('');
-	const [statusFilter, setStatusFilter] = React.useState<string>('');
-	const [genreMenuAnchor, setGenreMenuAnchor] = React.useState<null | HTMLElement>(null);
-	const [statusMenuAnchor, setStatusMenuAnchor] = React.useState<null | HTMLElement>(null);
+	const [search, setSearch] = React.useState<string>("");
+	const [genreFilter, setGenreFilter] = React.useState<string>("");
+	const [statusFilter, setStatusFilter] = React.useState<string>("");
+	const [genreMenuAnchor, setGenreMenuAnchor] =
+		React.useState<null | HTMLElement>(null);
+	const [statusMenuAnchor, setStatusMenuAnchor] =
+		React.useState<null | HTMLElement>(null);
 	const debouncedSearch = React.useDeferredValue(search);
 	const navigate = useNavigate();
 
 	const dialogs = useDialogs();
 	const notifications = useNotifications();
 
-	const [paginationModel, setPaginationModel] = React.useState<GridPaginationModel>({
-		page: 0,
-		pageSize: INITIAL_PAGE_SIZE,
+	const [paginationModel, setPaginationModel] =
+		React.useState<GridPaginationModel>({
+			page: 0,
+			pageSize: INITIAL_PAGE_SIZE,
+		});
+	const [filterModel, setFilterModel] = React.useState<GridFilterModel>({
+		items: [],
 	});
-	const [filterModel, setFilterModel] = React.useState<GridFilterModel>({ items: [] });
 	const [sortModel, setSortModel] = React.useState<GridSortModel>([]);
 
 	const queryClient = useQueryClient();
 
 	const { data, isLoading, error } = useQuery({
-		queryKey: ['books', paginationModel, debouncedSearch, genreFilter, statusFilter],
+		queryKey: [
+			"books",
+			paginationModel,
+			debouncedSearch,
+			genreFilter,
+			statusFilter,
+		],
 		queryFn: () =>
 			getBooks({
 				paginationModel,
@@ -86,39 +101,36 @@ export default function BookList() {
 		(model: GridPaginationModel) => {
 			setPaginationModel(model);
 		},
-		[],
+		[]
 	);
 
 	const handleFilterModelChange = React.useCallback(
 		(model: GridFilterModel) => {
 			setFilterModel(model);
 		},
-		[],
+		[]
 	);
 
-	const handleSortModelChange = React.useCallback(
-		(model: GridSortModel) => {
-			setSortModel(model);
-		},
-		[],
-	);
+	const handleSortModelChange = React.useCallback((model: GridSortModel) => {
+		setSortModel(model);
+	}, []);
 
-	const handleRowClick = React.useCallback<GridEventListener<'rowClick'>>(
+	const handleRowClick = React.useCallback<GridEventListener<"rowClick">>(
 		({ row }: { row: ApiBook }) => {
 			navigate(`/books/${row.id}`);
 		},
-		[navigate],
+		[navigate]
 	);
 
 	const handleCreateClick = React.useCallback(() => {
-		navigate('/books/new');
+		navigate("/books/new");
 	}, [navigate]);
 
 	const handleRowEdit = React.useCallback(
 		(book: ApiBook) => () => {
 			navigate(`/books/${book.id}/edit`);
 		},
-		[navigate],
+		[navigate]
 	);
 
 	const handleRowDelete = React.useCallback(
@@ -127,33 +139,33 @@ export default function BookList() {
 				`Do you wish to delete ${book.title}?`,
 				{
 					title: `Delete book?`,
-					severity: 'error',
-					okText: 'Delete',
-					cancelText: 'Cancel',
-				},
+					severity: "error",
+					okText: "Delete",
+					cancelText: "Cancel",
+				}
 			);
 
 			if (confirmed) {
 				try {
 					await deleteBook(String(book.id));
 
-					notifications.show('Book deleted successfully.', {
-						severity: 'success',
+					notifications.show("Book deleted successfully.", {
+						severity: "success",
 						autoHideDuration: 3000,
 					});
-					queryClient.invalidateQueries({ queryKey: ['books'] });
+					queryClient.invalidateQueries({ queryKey: ["books"] });
 				} catch (deleteError) {
 					notifications.show(
 						`Failed to delete book. Reason:' ${(deleteError as Error).message}`,
 						{
-							severity: 'error',
+							severity: "error",
 							autoHideDuration: 3000,
-						},
+						}
 					);
 				}
 			}
 		},
-		[dialogs, notifications, queryClient],
+		[dialogs, notifications, queryClient]
 	);
 
 	const initialState = React.useMemo(
@@ -167,68 +179,70 @@ export default function BookList() {
 				},
 			},
 		}),
-		[isMobile],
+		[isMobile]
 	);
 
 	const columns = React.useMemo<GridColDef[]>(
 		() => [
 			{
-				field: 'serialNo',
-				headerName: 'S.No',
+				field: "serialNo",
+				headerName: "S.No",
 				width: isMobile ? 60 : 80,
 				sortable: false,
 				filterable: false,
 				renderCell: (params) => {
-					const rowIndex = params.api.getRowIndexRelativeToVisibleRows(params.id);
+					const rowIndex = params.api.getRowIndexRelativeToVisibleRows(
+						params.id
+					);
 					const currentPage = paginationModel.page;
 					const pageSize = paginationModel.pageSize;
-					return (currentPage * pageSize) + rowIndex + 1;
-				}
+					return currentPage * pageSize + rowIndex + 1;
+				},
 			},
 			{
-				field: 'title',
-				headerName: 'Title',
+				field: "title",
+				headerName: "Title",
 				flex: isMobile ? 2 : 1,
 				minWidth: isMobile ? 120 : 160,
 				sortable: false,
-				filterable: false
+				filterable: false,
 			},
 			{
-				field: 'author',
-				headerName: 'Author',
+				field: "author",
+				headerName: "Author",
 				flex: isMobile ? 1 : 1,
 				minWidth: isMobile ? 100 : 140,
 				sortable: false,
-				filterable: false
+				filterable: false,
 			},
 			{
-				field: 'genre',
-				headerName: 'Genre',
+				field: "genre",
+				headerName: "Genre",
 				width: isTablet ? 120 : 140,
 				sortable: false,
-				filterable: false
+				filterable: false,
 			},
 			{
-				field: 'publishedYear',
-				headerName: 'Published Year',
-				type: 'custom',
+				field: "publishedYear",
+				headerName: "Published Year",
+				type: "custom",
 				width: isTablet ? 100 : 120,
 				sortable: false,
-				filterable: false
+				filterable: false,
 			},
 			{
-				field: 'status',
-				headerName: 'Status',
+				field: "status",
+				headerName: "Status",
 				width: isMobile ? 80 : 100,
 				sortable: false,
-				filterable: false
+				filterable: false,
 			},
 			{
-				field: 'actions',
-				type: 'actions',
-				headerName: 'Actions',
-				width: isMobile ? 80 : 120,
-				align: 'center',
+				field: "actions",
+				type: "actions",
+				headerName: "Actions",
+				width: isMobile ? 100 : 120,
+				align: "center",
 				getActions: ({ row }: { row: ApiBook }) => [
 					<GridActionsCellItem
 						key="edit-item"
@@ -247,10 +261,10 @@ export default function BookList() {
 				],
 			},
 		],
-		[handleRowEdit, handleRowDelete, paginationModel, isMobile, isTablet],
+		[handleRowEdit, handleRowDelete, paginationModel, isMobile, isTablet]
 	);
 
-	const pageTitle = 'Books';
+	const pageTitle = "Books";
 
 	const handleGenreClick = (event: React.MouseEvent<HTMLElement>) => {
 		setGenreMenuAnchor(event.currentTarget);
@@ -279,16 +293,16 @@ export default function BookList() {
 	};
 
 	const handleSearchClear = () => {
-		setSearch('');
+		setSearch("");
 	};
 
 	return (
 		<PageContainer
 			title={pageTitle}
 			actions={
-				<Box sx={{ width: '100%' }}>
+				<Box sx={{ width: "100%" }}>
 					{/* Search Input Box */}
-					<Box sx={{ width: '100%', mb: 2 }}>
+					<Box sx={{ width: "100%", mb: 2 }}>
 						<TextField
 							value={search}
 							onChange={(e) => {
@@ -314,9 +328,9 @@ export default function BookList() {
 												edge="end"
 												size="small"
 												sx={{
-													minWidth: 'auto',
-													width: '30px',
-													height: '30px'
+													minWidth: "auto",
+													width: "30px",
+													height: "30px",
 												}}
 											>
 												<ClearIcon />
@@ -326,9 +340,9 @@ export default function BookList() {
 								},
 							}}
 							sx={{
-								'& .MuiOutlinedInput-root': {
-									'&:hover .MuiOutlinedInput-notchedOutline': {
-										borderColor: 'primary.main',
+								"& .MuiOutlinedInput-root": {
+									"&:hover .MuiOutlinedInput-notchedOutline": {
+										borderColor: "primary.main",
 									},
 								},
 							}}
@@ -336,13 +350,13 @@ export default function BookList() {
 					</Box>
 
 					{/* Filter and Create Buttons Box */}
-					<Box sx={{ width: '100%' }}>
+					<Box sx={{ width: "100%" }}>
 						<Stack
 							direction="row"
 							spacing={1}
 							sx={{
-								width: '100%',
-								justifyContent: { xs: 'space-between', sm: 'flex-end' }
+								width: "100%",
+								justifyContent: { xs: "space-between", sm: "flex-end" },
 							}}
 						>
 							{/* Genre Filter Button */}
@@ -351,29 +365,33 @@ export default function BookList() {
 								onClick={handleGenreClick}
 								size="small"
 								sx={{
-									minWidth: { xs: '80px', sm: '100px', md: '120px' },
-									flex: { xs: 1, sm: 'none' },
-									px: { xs: 1, sm: 2 }
+									minWidth: { xs: "80px", sm: "100px", md: "120px" },
+									flex: { xs: 1, sm: "none" },
+									px: { xs: 1, sm: 2 },
 								}}
 							>
 								{genreFilter ? (
 									<Chip
-										label={genreFilter.length > 8 ? `${genreFilter.substring(0, 8)}...` : genreFilter}
+										label={
+											genreFilter.length > 8
+												? `${genreFilter.substring(0, 8)}...`
+												: genreFilter
+										}
 										size="small"
-										onDelete={() => handleGenreSelect('')}
+										onDelete={() => handleGenreSelect("")}
 										sx={{
 											height: 20,
-											fontSize: '0.75rem',
-											maxWidth: '100%',
-											'& .MuiChip-label': {
-												overflow: 'hidden',
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap'
-											}
+											fontSize: "0.75rem",
+											maxWidth: "100%",
+											"& .MuiChip-label": {
+												overflow: "hidden",
+												textOverflow: "ellipsis",
+												whiteSpace: "nowrap",
+											},
 										}}
 									/>
 								) : (
-									'Genre'
+									"Genre"
 								)}
 							</Button>
 
@@ -383,29 +401,29 @@ export default function BookList() {
 								onClick={handleStatusClick}
 								size="small"
 								sx={{
-									minWidth: { xs: '80px', sm: '100px', md: '120px' },
-									flex: { xs: 1, sm: 'none' },
-									px: { xs: 1, sm: 2 }
+									minWidth: { xs: "80px", sm: "100px", md: "120px" },
+									flex: { xs: 1, sm: "none" },
+									px: { xs: 1, sm: 2 },
 								}}
 							>
 								{statusFilter ? (
 									<Chip
 										label={statusFilter}
 										size="small"
-										onDelete={() => handleStatusSelect('')}
+										onDelete={() => handleStatusSelect("")}
 										sx={{
 											height: 20,
-											fontSize: '0.75rem',
-											maxWidth: '100%',
-											'& .MuiChip-label': {
-												overflow: 'hidden',
-												textOverflow: 'ellipsis',
-												whiteSpace: 'nowrap'
-											}
+											fontSize: "0.75rem",
+											maxWidth: "100%",
+											"& .MuiChip-label": {
+												overflow: "hidden",
+												textOverflow: "ellipsis",
+												whiteSpace: "nowrap",
+											},
 										}}
 									/>
 								) : (
-									'Status'
+									"Status"
 								)}
 							</Button>
 
@@ -416,9 +434,9 @@ export default function BookList() {
 								startIcon={<AddIcon />}
 								size="small"
 								sx={{
-									minWidth: { xs: '80px', sm: '100px' },
-									flex: { xs: 1, sm: 'none' },
-									px: { xs: 1, sm: 2 }
+									minWidth: { xs: "80px", sm: "100px" },
+									flex: { xs: 1, sm: "none" },
+									px: { xs: 1, sm: 2 },
 								}}
 							>
 								Create
@@ -437,27 +455,49 @@ export default function BookList() {
 					paper: {
 						style: {
 							maxHeight: 300,
-							width: '200px',
+							width: "200px",
 						},
 					},
 				}}
 			>
-				<MenuItem onClick={() => handleGenreSelect('')}>
+				<MenuItem onClick={() => handleGenreSelect("")}>
 					<em>All Genres</em>
 				</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Thriller')}>Thriller</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Memoir')}>Memoir</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Self-Help')}>Self-Help</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Science Fiction')}>Science Fiction</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Fantasy')}>Fantasy</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Biography')}>Biography</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Philosophy')}>Philosophy</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('History')}>History</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Dystopian')}>Dystopian</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Classic')}>Classic</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Romance')}>Romance</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Post-Apocalyptic')}>Post-Apocalyptic</MenuItem>
-				<MenuItem onClick={() => handleGenreSelect('Horror')}>Horror</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Thriller")}>
+					Thriller
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Memoir")}>Memoir</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Self-Help")}>
+					Self-Help
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Science Fiction")}>
+					Science Fiction
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Fantasy")}>
+					Fantasy
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Biography")}>
+					Biography
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Philosophy")}>
+					Philosophy
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("History")}>
+					History
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Dystopian")}>
+					Dystopian
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Classic")}>
+					Classic
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Romance")}>
+					Romance
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Post-Apocalyptic")}>
+					Post-Apocalyptic
+				</MenuItem>
+				<MenuItem onClick={() => handleGenreSelect("Horror")}>Horror</MenuItem>
 			</Menu>
 
 			{/* Status Menu */}
@@ -469,19 +509,21 @@ export default function BookList() {
 					paper: {
 						style: {
 							maxHeight: 300,
-							width: '150px',
+							width: "150px",
 						},
 					},
 				}}
 			>
-				<MenuItem onClick={() => handleStatusSelect('')}>
+				<MenuItem onClick={() => handleStatusSelect("")}>
 					<em>All Status</em>
 				</MenuItem>
-				<MenuItem onClick={() => handleStatusSelect('Available')}>Available</MenuItem>
-				<MenuItem onClick={() => handleStatusSelect('Issued')}>Issued</MenuItem>
+				<MenuItem onClick={() => handleStatusSelect("Available")}>
+					Available
+				</MenuItem>
+				<MenuItem onClick={() => handleStatusSelect("Issued")}>Issued</MenuItem>
 			</Menu>
 
-			<Box sx={{ flex: 1, width: '100%' }}>
+			<Box sx={{ flex: 1, width: "100%" }}>
 				{error ? (
 					<Box sx={{ flexGrow: 1 }}>
 						<Alert severity="error">{error.message}</Alert>
@@ -512,32 +554,32 @@ export default function BookList() {
 						disableDensitySelector
 						sortingOrder={[]}
 						sx={{
-							height: { xs: 'calc(100vh - 250px)', sm: 'calc(100vh - 200px)' },
+							height: { xs: "calc(100vh - 250px)", sm: "calc(100vh - 200px)" },
 							[`& .${gridClasses.columnHeader}, & .${gridClasses.cell}`]: {
-								outline: 'transparent',
+								outline: "transparent",
 							},
 							[`& .${gridClasses.columnHeader}:focus-within, & .${gridClasses.cell}:focus-within`]:
-							{
-								outline: 'none',
-							},
+								{
+									outline: "none",
+								},
 							[`& .${gridClasses.row}:hover`]: {
-								cursor: 'pointer',
+								cursor: "pointer",
 							},
-							'& .MuiDataGrid-cell': {
-								fontSize: { xs: '0.875rem', sm: '0.9rem' },
+							"& .MuiDataGrid-cell": {
+								fontSize: { xs: "0.875rem", sm: "0.9rem" },
 							},
-							'& .MuiDataGrid-columnHeader': {
-								fontSize: { xs: '0.875rem', sm: '0.9rem' },
+							"& .MuiDataGrid-columnHeader": {
+								fontSize: { xs: "0.875rem", sm: "0.9rem" },
 								fontWeight: 600,
 							},
 						}}
 						slotProps={{
 							loadingOverlay: {
-								variant: 'circular-progress',
-								noRowsVariant: 'circular-progress',
+								variant: "circular-progress",
+								noRowsVariant: "circular-progress",
 							},
 							baseIconButton: {
-								size: 'small',
+								size: "small",
 							},
 						}}
 					/>
