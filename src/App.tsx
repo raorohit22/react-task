@@ -1,12 +1,8 @@
-import CrudDashboard from './CrudDashboard'
+import React from "react";
+import CrudDashboard from "./CrudDashboard";
 
-function App() {
+const App: React.FC = () => {
+	return <CrudDashboard />;
+};
 
-  return (
-    <>
-      <CrudDashboard />
-    </>
-  )
-}
-
-export default App
+export default App;

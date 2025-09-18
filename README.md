@@ -113,8 +113,6 @@ react-assignment/
     │   ├── DashboardHeader.tsx
     │   ├── DashboardLayout.tsx
     │   ├── DashboardSidebar.tsx
-    │   ├── DashboardSidebarDividerItem.tsx
-    │   ├── DashboardSidebarHeaderItem.tsx
     │   ├── DashboardSidebarPageItem.tsx
     │   └── PageContainer.tsx
     ├── context/
