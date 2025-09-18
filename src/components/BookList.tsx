@@ -43,11 +43,21 @@ import {
 
 const INITIAL_PAGE_SIZE = 10;
 
+/**
+ * BookList
+ * Paginated, server-driven list of books using MUI DataGrid and React Query.
+ * Features:
+ * - Search (debounced), genre and status filters
+ * - Server pagination and preserved placeholder data during refetch
+ * - Responsive columns and compact actions for mobile/tablet
+ * - Row click navigates to details; inline actions for edit/delete
+ */
 export default function BookList() {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 	const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
+	// Local UI state: search + filter chips and their menus
 	const [search, setSearch] = React.useState<string>("");
 	const [genreFilter, setGenreFilter] = React.useState<string>("");
 	const [statusFilter, setStatusFilter] = React.useState<string>("");
@@ -55,12 +65,14 @@ export default function BookList() {
 		React.useState<null | HTMLElement>(null);
 	const [statusMenuAnchor, setStatusMenuAnchor] =
 		React.useState<null | HTMLElement>(null);
+	// Defer search input value to reduce query churn while typing
 	const debouncedSearch = React.useDeferredValue(search);
 	const navigate = useNavigate();
 
 	const dialogs = useDialogs();
 	const notifications = useNotifications();
 
+	// DataGrid models managed locally; sent to server-side query
 	const [paginationModel, setPaginationModel] =
 		React.useState<GridPaginationModel>({
 			page: 0,
@@ -73,6 +85,7 @@ export default function BookList() {
 
 	const queryClient = useQueryClient();
 
+	// Fetch books with server pagination and filters; keepPreviousData for smooth paging
 	const { data, isLoading, error } = useQuery({
 		queryKey: [
 			"books",
@@ -97,6 +110,7 @@ export default function BookList() {
 		setPaginationModel((prev) => ({ ...prev, page: 0 }));
 	}, [debouncedSearch, genreFilter, statusFilter]);
 
+	// Handlers for DataGrid models
 	const handlePaginationModelChange = React.useCallback(
 		(model: GridPaginationModel) => {
 			setPaginationModel(model);
@@ -122,10 +136,12 @@ export default function BookList() {
 		[navigate]
 	);
 
+	// Top-level action buttons
 	const handleCreateClick = React.useCallback(() => {
 		navigate("/books/new");
 	}, [navigate]);
 
+	// Row actions
 	const handleRowEdit = React.useCallback(
 		(book: ApiBook) => () => {
 			navigate(`/books/${book.id}/edit`);
@@ -182,6 +198,7 @@ export default function BookList() {
 		[isMobile]
 	);
 
+	// DataGrid column config; serial number computed from page/pageSize
 	const columns = React.useMemo<GridColDef[]>(
 		() => [
 			{
