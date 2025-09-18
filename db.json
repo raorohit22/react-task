@@ -1,0 +1,180 @@
+{
+  "books": [
+    {
+      "title": "The Silent Patient",
+      "author": "Alex Michaelides",
+      "genre": "Thriller",
+      "publishedYear": 2024,
+      "status": "Available",
+      "id": "9532"
+    },
+    {
+      "title": "Educated",
+      "author": "Tara Westover",
+      "genre": "Memoir",
+      "publishedYear": 2018,
+      "status": "Issued",
+      "id": "794b"
+    },
+    {
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "genre": "Self-Help",
+      "publishedYear": 2018,
+      "status": "Available",
+      "id": "4159"
+    },
+    {
+      "title": "Project Hail Mary",
+      "author": "Andy Weir",
+      "genre": "Science Fiction",
+      "publishedYear": 2021,
+      "status": "Available",
+      "id": "49e5"
+    },
+    {
+      "title": "The Midnight Library",
+      "author": "Matt Haig",
+      "genre": "Fantasy",
+      "publishedYear": 2023,
+      "status": "Issued",
+      "id": "be5c"
+    },
+    {
+      "title": "Dune",
+      "author": "Frank Herbert",
+      "genre": "Science Fiction",
+      "publishedYear": 1965,
+      "status": "Available",
+      "id": "0e81"
+    },
+    {
+      "title": "Becoming",
+      "author": "Michelle Obama",
+      "genre": "Biography",
+      "publishedYear": 2018,
+      "status": "Available",
+      "id": "0917"
+    },
+    {
+      "title": "The Alchemist",
+      "author": "Paulo Coelho",
+      "genre": "Philosophy",
+      "publishedYear": 1988,
+      "status": "Issued",
+      "id": "3e4a"
+    },
+    {
+      "title": "Sapiens",
+      "author": "Yuval Noah Harari",
+      "genre": "History",
+      "publishedYear": 2014,
+      "status": "Available",
+      "id": "934a"
+    },
+    {
+      "title": "Harry Potter and the Sorcerer's Stone",
+      "author": "J.K. Rowling",
+      "genre": "Fantasy",
+      "publishedYear": 1997,
+      "status": "Available",
+      "id": "2694"
+    },
+    {
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien",
+      "genre": "Fantasy",
+      "publishedYear": 1937,
+      "status": "Available",
+      "id": "6d64"
+    },
+    {
+      "title": "1984",
+      "author": "George Orwell",
+      "genre": "Dystopian",
+      "publishedYear": 1949,
+      "status": "Issued",
+      "id": "74b3"
+    },
+    {
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "genre": "Classic",
+      "publishedYear": 1960,
+      "status": "Available",
+      "id": "5694"
+    },
+    {
+      "title": "The Catcher in the Rye",
+      "author": "J.D. Salinger",
+      "genre": "Classic",
+      "publishedYear": 1951,
+      "status": "Available",
+      "id": "cf28"
+    },
+    {
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "genre": "Romance",
+      "publishedYear": 1813,
+      "status": "Issued",
+      "id": "3106"
+    },
+    {
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "genre": "Classic",
+      "publishedYear": 1925,
+      "status": "Available",
+      "id": "3b42"
+    },
+    {
+      "title": "The Da Vinci Code",
+      "author": "Dan Brown",
+      "genre": "Thriller",
+      "publishedYear": 2003,
+      "status": "Available",
+      "id": "43d0"
+    },
+    {
+      "title": "Gone Girl",
+      "author": "Gillian Flyn",
+      "genre": "Thriller",
+      "publishedYear": 2012,
+      "status": "Available",
+      "id": "342d"
+    },
+    {
+      "title": "The Road",
+      "author": "Cormac McCarthy",
+      "genre": "Post-Apocalyptic",
+      "publishedYear": 2006,
+      "status": "Available",
+      "id": "204c"
+    },
+    {
+      "title": "The Shining",
+      "author": "Stephen King",
+      "genre": "Horror",
+      "publishedYear": 1978,
+      "status": "Available",
+      "id": "08f2"
+    },
+    {
+      "id": "d8b1",
+      "title": "test29",
+      "author": "test2",
+      "genre": "test2",
+      "publishedYear": 2025,
+      "status": "Available"
+    },
+    {
+      "id": "94eb",
+      "title": "fguf",
+      "author": "srgsdgs",
+      "genre": "Science Fiction",
+      "publishedYear": 2025,
+      "status": "Available"
+    }
+  ]
+}
